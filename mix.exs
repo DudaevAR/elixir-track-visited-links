@@ -9,7 +9,10 @@ defmodule Tracker.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      test_coverage: [
+        tool: ExCoveralls
+      ]
     ]
   end
 
@@ -32,6 +35,7 @@ defmodule Tracker.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:excoveralls, "~> 0.12", only: :test},
       {:phoenix, "~> 1.4.10"},
       {:phoenix_pubsub, "~> 1.1"},
       {:jason, "~> 1.0"},
