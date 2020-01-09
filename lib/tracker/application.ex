@@ -6,12 +6,20 @@ defmodule Tracker.Application do
   use Application
 
   def start(_type, _args) do
+    redis_config = Application.get_env(:tracker, Tracker.Redis)
+
     # List all child processes to be supervised
     children = [
       # Start the endpoint when the application starts
-      TrackerWeb.Endpoint
+      TrackerWeb.Endpoint,
       # Starts a worker by calling: Tracker.Worker.start_link(arg)
       # {Tracker.Worker, arg},
+      {Redix,
+       host: redis_config[:host],
+       port: redis_config[:port],
+       password: redis_config[:password],
+       database: redis_config[:database],
+       name: :redix}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

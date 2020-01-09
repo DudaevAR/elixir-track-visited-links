@@ -39,7 +39,8 @@ defmodule Tracker.MixProject do
       {:phoenix, "~> 1.4.10"},
       {:phoenix_pubsub, "~> 1.1"},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+      {:redix, "~> 0.10"}
     ]
   end
 end
