@@ -8,3 +8,5 @@ config :tracker, TrackerWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+config :tracker, Tracker.Redis, database: System.get_env("REDIS_DATABASE") || "1"

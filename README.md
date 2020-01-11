@@ -17,3 +17,4 @@ To start tests:
 
   * Start tests `mix test`
   * Start tests with coverage `MIX_ENV=test mix coveralls`
+  * Start tests with coverage html report `MIX_ENV=test mix coveralls.html`

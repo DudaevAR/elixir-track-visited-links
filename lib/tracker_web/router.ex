@@ -7,5 +7,7 @@ defmodule TrackerWeb.Router do
 
   scope "/api", TrackerWeb do
     pipe_through :api
+
+    resources "/visited_links", VisitedLinksController, only: [:create, :index]
   end
 end
