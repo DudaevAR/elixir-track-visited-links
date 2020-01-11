@@ -67,6 +67,15 @@ defmodule TrackerWeb.VisitedLinksControllerTest do
       assert response == %{"status" => "Unsupported parameters. Valid parameters: 'from', 'to'"}
     end
 
+    test "with invalid parameter: from not precede to", %{conn: conn} do
+      response =
+        conn
+        |> get(Helpers.visited_links_path(conn, :index), from: 3, to: 1)
+        |> json_response(200)
+
+      assert response == %{"status" => "'from' must precede 'to'"}
+    end
+
     test "with invalid parameter: from not number", %{conn: conn} do
       response =
         conn
