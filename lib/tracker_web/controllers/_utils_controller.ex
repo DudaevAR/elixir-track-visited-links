@@ -1,8 +1,15 @@
 defmodule TrackerWeb.UtilsController do
   use TrackerWeb, :controller
+  use PhoenixSwagger
 
   def respond_success(conn) do
     conn |> json(%{"status" => "ok"})
+  end
+
+  def respond_success(conn, status_code) when is_number(status_code) do
+    conn
+    |> put_status(status_code)
+    |> respond_success()
   end
 
   def respond_success(conn, fields) do

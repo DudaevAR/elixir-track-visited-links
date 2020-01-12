@@ -1,5 +1,5 @@
 defmodule TrackerWeb.VisitedLinksControllerTest do
-  use TrackerWeb.ConnCase, async: true
+  use TrackerWeb.ConnCase
 
   alias TrackerWeb.Router.Helpers
   alias Tracker.BLL.Utils
@@ -33,7 +33,7 @@ defmodule TrackerWeb.VisitedLinksControllerTest do
             "https://stackoverflow.com/questions/11828270/how-to-exit-the-vim-editor"
           ]
         )
-        |> json_response(200)
+        |> json_response(201)
 
       assert response == %{"status" => "ok"}
     end
@@ -94,7 +94,7 @@ defmodule TrackerWeb.VisitedLinksControllerTest do
           "funbox.ru"
         ]
       )
-      |> json_response(200)
+      |> json_response(201)
 
       :timer.sleep(1000)
       time_from = Utils.get_current_unix_time()
@@ -108,7 +108,7 @@ defmodule TrackerWeb.VisitedLinksControllerTest do
           "https://stackoverflow.com/questions/11828270/how-to-exit-the-vim-editor"
         ]
       )
-      |> json_response(200)
+      |> json_response(201)
 
       time_to = Utils.get_current_unix_time()
       :timer.sleep(1000)
@@ -121,7 +121,7 @@ defmodule TrackerWeb.VisitedLinksControllerTest do
           "funbox.ru"
         ]
       )
-      |> json_response(200)
+      |> json_response(201)
 
       response =
         conn

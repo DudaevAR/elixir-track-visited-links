@@ -7,8 +7,9 @@ defmodule Tracker.MixProject do
       version: "0.1.0",
       elixir: "~> 1.9",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix] ++ Mix.compilers(),
+      compilers: [:phoenix] ++ Mix.compilers() ++ [:phoenix_swagger],
       start_permanent: Mix.env() == :prod,
+      aliases: aliases(),
       deps: deps(),
       test_coverage: [
         tool: ExCoveralls
@@ -22,7 +23,7 @@ defmodule Tracker.MixProject do
   def application do
     [
       mod: {Tracker.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :phoenix_swagger, :runtime_tools]
     ]
   end
 
@@ -40,7 +41,17 @@ defmodule Tracker.MixProject do
       {:phoenix_pubsub, "~> 1.1"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:redix, "~> 0.10"}
+      {:redix, "~> 0.10"},
+      {:poison, "~> 3.0"},
+      {:phoenix_swagger, "~> 0.8"},
+      {:ex_json_schema, "~> 0.5"}
+    ]
+  end
+
+  defp aliases do
+    [
+      test: ["swagger", "test"],
+      swagger: ["phx.swagger.generate"]
     ]
   end
 end

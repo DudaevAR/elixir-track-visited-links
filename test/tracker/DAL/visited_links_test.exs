@@ -1,5 +1,5 @@
 defmodule Tracker.DAL.VisitedLinksTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
 
   setup do
     {:ok, conn} = Redix.start_link()

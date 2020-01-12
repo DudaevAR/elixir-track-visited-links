@@ -1,5 +1,5 @@
 defmodule TrackerWeb.VisitedDomainsControllerTest do
-  use TrackerWeb.ConnCase, async: true
+  use TrackerWeb.ConnCase
 
   alias TrackerWeb.Router.Helpers
   alias Tracker.BLL.Utils
@@ -30,7 +30,7 @@ defmodule TrackerWeb.VisitedDomainsControllerTest do
           "funbox.ru"
         ]
       )
-      |> json_response(200)
+      |> json_response(201)
 
       :timer.sleep(1000)
       time_from = Utils.get_current_unix_time()
@@ -44,7 +44,7 @@ defmodule TrackerWeb.VisitedDomainsControllerTest do
           "https://stackoverflow.com/questions/11828270/how-to-exit-the-vim-editor"
         ]
       )
-      |> json_response(200)
+      |> json_response(201)
 
       time_to = Utils.get_current_unix_time()
       :timer.sleep(1000)
@@ -57,7 +57,7 @@ defmodule TrackerWeb.VisitedDomainsControllerTest do
           "funbox.ru"
         ]
       )
-      |> json_response(200)
+      |> json_response(201)
 
       response =
         conn
@@ -66,7 +66,7 @@ defmodule TrackerWeb.VisitedDomainsControllerTest do
 
       assert response == %{
                "status" => "ok",
-               "links" => ["funbox.ru", "stackoverflow.com", "ya.ru"]
+               "domains" => ["funbox.ru", "stackoverflow.com", "ya.ru"]
              }
 
       response =
@@ -76,7 +76,7 @@ defmodule TrackerWeb.VisitedDomainsControllerTest do
 
       assert response == %{
                "status" => "ok",
-               "links" => [
+               "domains" => [
                  "funbox.ru",
                  "stackoverflow.com",
                  "ya.ru"
