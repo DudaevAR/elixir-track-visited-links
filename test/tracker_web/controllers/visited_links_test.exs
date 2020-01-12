@@ -123,35 +123,56 @@ defmodule TrackerWeb.VisitedLinksControllerTest do
       )
       |> json_response(201)
 
+      right_response = %{
+        "status" => "ok",
+        "links" => [
+          "funbox.ru",
+          "https://stackoverflow.com/questions/11828270/how-to-exit-the-vim-editor",
+          "https://ya.ru?q=123"
+        ]
+      }
+
       response =
         conn
         |> get(Helpers.visited_links_path(conn, :index), from: time_from, to: time_to)
         |> json_response(200)
 
-      assert response == %{
-               "status" => "ok",
-               "links" => [
-                 "funbox.ru",
-                 "https://stackoverflow.com/questions/11828270/how-to-exit-the-vim-editor",
-                 "https://ya.ru?q=123"
-               ]
-             }
+      assert response == right_response
+
+      response =
+        conn
+        |> get(Helpers.visited_links_path(conn, :index),
+          from: Integer.to_string(time_from),
+          to: Integer.to_string(time_to)
+        )
+        |> json_response(200)
+
+      assert response == right_response
+
+      right_response = %{
+        "status" => "ok",
+        "links" => [
+          "funbox.ru",
+          "https://stackoverflow.com/questions/11828270/how-to-exit-the-vim-editor",
+          "https://ya.ru?q=123",
+          "funbox.ru",
+          "https://ya.ru"
+        ]
+      }
 
       response =
         conn
         |> get(Helpers.visited_links_path(conn, :index), from: time_from)
         |> json_response(200)
 
-      assert response == %{
-               "status" => "ok",
-               "links" => [
-                 "funbox.ru",
-                 "https://stackoverflow.com/questions/11828270/how-to-exit-the-vim-editor",
-                 "https://ya.ru?q=123",
-                 "funbox.ru",
-                 "https://ya.ru"
-               ]
-             }
+      assert response == right_response
+
+      response =
+        conn
+        |> get(Helpers.visited_links_path(conn, :index), from: Integer.to_string(time_from))
+        |> json_response(200)
+
+      assert response == right_response
     end
   end
 end

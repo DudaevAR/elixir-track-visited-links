@@ -12,6 +12,15 @@ defmodule TrackerWeb.VisitedDomainsControllerTest do
   end
 
   describe "get" do
+    test "without parameters", %{conn: conn} do
+      response =
+        conn
+        |> get(Helpers.visited_domains_path(conn, :index), links: "vk.com")
+        |> json_response(200)
+
+      assert response == %{"status" => "Unsupported parameters. Valid parameters: 'from', 'to'"}
+    end
+
     test "with invalid parameter: from not precede to", %{conn: conn} do
       response =
         conn
