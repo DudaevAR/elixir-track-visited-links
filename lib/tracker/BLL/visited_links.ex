@@ -2,13 +2,11 @@ defmodule Tracker.BLL.VisitedLinks do
   alias Tracker.BLL.Utils
 
   def create(links) when is_list(links) do
-    case links |> length() do
-      0 ->
-        {:err, "The parameter 'links' is empty"}
-
-      _ ->
-        time = Utils.get_current_unix_time()
-        links |> Tracker.DAL.VisitedLinks.save_links(time)
+    if links |> length() == 0 do
+      {:err, "The parameter 'links' is empty"}
+    else
+      time = Utils.get_current_unix_time()
+      links |> Tracker.DAL.VisitedLinks.save_links(time)
     end
   end
 
@@ -16,10 +14,14 @@ defmodule Tracker.BLL.VisitedLinks do
     {:err, "The parameter 'links' must be a list"}
   end
 
-  defp get_links(from, to) when is_number(from) and is_number(to),
-    do: Tracker.DAL.VisitedLinks.get_original_links(from, to)
+  defp get_links(start_time, end_time) when is_number(start_time) and is_number(end_time),
+    do: Tracker.DAL.VisitedLinks.get_original_links(start_time, end_time)
 
-  def index(from, to) do
-    Utils.check_parameters(from, to, &get_links/2)
+  def index(start_time, end_time) do
+    Utils.convert_parameters_and_apply(start_time, end_time, &get_links/2)
+  end
+
+  def to_json(links) do
+    %{"links" => links}
   end
 end

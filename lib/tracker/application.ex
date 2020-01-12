@@ -1,6 +1,4 @@
 defmodule Tracker.Application do
-  # See https://hexdocs.pm/elixir/Application.html
-  # for more information on OTP Applications
   @moduledoc false
 
   use Application
@@ -8,12 +6,8 @@ defmodule Tracker.Application do
   def start(_type, _args) do
     redis_config = Application.get_env(:tracker, Tracker.Redis)
 
-    # List all child processes to be supervised
     children = [
-      # Start the endpoint when the application starts
       TrackerWeb.Endpoint,
-      # Starts a worker by calling: Tracker.Worker.start_link(arg)
-      # {Tracker.Worker, arg},
       {Redix,
        host: redis_config[:host],
        port: redis_config[:port],
@@ -22,8 +16,6 @@ defmodule Tracker.Application do
        name: :redix}
     ]
 
-    # See https://hexdocs.pm/elixir/Supervisor.html
-    # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Tracker.Supervisor]
     Supervisor.start_link(children, opts)
   end

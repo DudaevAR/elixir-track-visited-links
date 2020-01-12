@@ -13,7 +13,7 @@ defmodule TrackerWeb.VisitedDomainsController do
           description("Response schema for single tag")
 
           properties do
-            links(Schema.array(:string), "Tracked resources's domains")
+            domains(Schema.array(:string), "Tracked resources's domains")
             status(:string, "Response status")
           end
 
@@ -49,12 +49,15 @@ defmodule TrackerWeb.VisitedDomainsController do
   end
 
   # coveralls-ignore-stop
-  def index(conn, %{"from" => from} = params) do
-    to = Map.get(params, "to")
+  def index(conn, %{"from" => start_time} = params) do
+    end_time = Map.get(params, "to")
 
-    case VisitedDomains.index(from, to) do
-      {:ok, domains} -> conn |> UtilsController.respond_success(%{"domains" => domains})
-      err -> conn |> UtilsController.respond_error(err)
+    case VisitedDomains.index(start_time, end_time) do
+      {:ok, domains} ->
+        conn |> UtilsController.respond_success(domains |> VisitedDomains.to_json())
+
+      err ->
+        conn |> UtilsController.respond_error(err)
     end
   end
 

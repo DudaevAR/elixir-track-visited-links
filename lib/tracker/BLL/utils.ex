@@ -12,24 +12,27 @@ defmodule Tracker.BLL.Utils do
     end
   end
 
-  defp convert_parameter_from(v) when is_number(v), do: v
-  defp convert_parameter_from(v), do: v |> convert_to_integer()
+  defp convert_start_time_to_number(v) when is_number(v), do: v
+  defp convert_start_time_to_number(v), do: v |> convert_to_integer()
 
-  defp convert_parameter_to(v) when is_number(v), do: v
-  defp convert_parameter_to(v) when is_nil(v), do: get_current_unix_time()
-  defp convert_parameter_to(v), do: v |> convert_to_integer()
+  defp convert_end_time_to_number(v) when is_number(v), do: v
+  defp convert_end_time_to_number(v) when is_nil(v), do: get_current_unix_time()
+  defp convert_end_time_to_number(v), do: v |> convert_to_integer()
 
-  defp check_parameters_(from, to, _) when is_number(from) and is_number(to) and from > to,
-    do: {:err, "'from' must precede 'to'"}
+  defp apply_with_validate(start_time, end_time, _)
+       when is_number(start_time) and is_number(end_time) and start_time > end_time,
+       do: {:err, "'from' must precede 'to'"}
 
-  defp check_parameters_(from, to, func) when is_number(from) and is_number(to),
-    do: func.(from, to)
+  defp apply_with_validate(start_time, end_time, func)
+       when is_number(start_time) and is_number(end_time),
+       do: func.(start_time, end_time)
 
-  defp check_parameters_(_, _, _), do: {:err, "The parameters 'from' and 'to' must be numbers"}
+  defp apply_with_validate(_, _, _),
+    do: {:err, "The parameters 'from' and 'to' must be numbers"}
 
-  def check_parameters(from, to, func) do
-    from = from |> convert_parameter_from
-    to = to |> convert_parameter_to
-    check_parameters_(from, to, func)
+  def convert_parameters_and_apply(start_time, end_time, func) do
+    start_time = start_time |> convert_start_time_to_number
+    end_time = end_time |> convert_end_time_to_number
+    apply_with_validate(start_time, end_time, func)
   end
 end

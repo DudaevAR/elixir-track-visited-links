@@ -101,11 +101,11 @@ defmodule TrackerWeb.VisitedLinksController do
   end
 
   # coveralls-ignore-stop
-  def index(conn, %{"from" => from} = params) do
-    to = Map.get(params, "to")
+  def index(conn, %{"from" => start_time} = params) do
+    end_time = Map.get(params, "to")
 
-    case VisitedLinks.index(from, to) do
-      {:ok, links} -> conn |> UtilsController.respond_success(%{"links" => links})
+    case VisitedLinks.index(start_time, end_time) do
+      {:ok, links} -> conn |> UtilsController.respond_success(links |> VisitedLinks.to_json())
       err -> conn |> UtilsController.respond_error(err)
     end
   end

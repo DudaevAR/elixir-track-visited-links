@@ -1,5 +1,6 @@
 defmodule TrackerWeb.VisitedLinksControllerTest do
   use TrackerWeb.ConnCase
+  use PhoenixSwagger.SchemaTest, "priv/static/swagger.json"
 
   alias TrackerWeb.Router.Helpers
   alias Tracker.BLL.Utils
@@ -85,7 +86,7 @@ defmodule TrackerWeb.VisitedLinksControllerTest do
       assert response == %{"status" => "The parameters 'from' and 'to' must be numbers"}
     end
 
-    test "with valid parameters", %{conn: conn} do
+    test "with valid parameters", %{conn: conn, swagger_schema: schema} do
       conn
       |> post(
         Helpers.visited_links_path(conn, :create),
@@ -94,6 +95,7 @@ defmodule TrackerWeb.VisitedLinksControllerTest do
           "funbox.ru"
         ]
       )
+      |> validate_resp_schema(schema, "OkResponse")
       |> json_response(201)
 
       :timer.sleep(1000)
@@ -108,6 +110,7 @@ defmodule TrackerWeb.VisitedLinksControllerTest do
           "https://stackoverflow.com/questions/11828270/how-to-exit-the-vim-editor"
         ]
       )
+      |> validate_resp_schema(schema, "OkResponse")
       |> json_response(201)
 
       time_to = Utils.get_current_unix_time()
@@ -121,6 +124,7 @@ defmodule TrackerWeb.VisitedLinksControllerTest do
           "funbox.ru"
         ]
       )
+      |> validate_resp_schema(schema, "OkResponse")
       |> json_response(201)
 
       right_response = %{
@@ -135,6 +139,7 @@ defmodule TrackerWeb.VisitedLinksControllerTest do
       response =
         conn
         |> get(Helpers.visited_links_path(conn, :index), from: time_from, to: time_to)
+        |> validate_resp_schema(schema, "LinksResponse")
         |> json_response(200)
 
       assert response == right_response
@@ -145,6 +150,7 @@ defmodule TrackerWeb.VisitedLinksControllerTest do
           from: Integer.to_string(time_from),
           to: Integer.to_string(time_to)
         )
+        |> validate_resp_schema(schema, "LinksResponse")
         |> json_response(200)
 
       assert response == right_response
@@ -163,6 +169,7 @@ defmodule TrackerWeb.VisitedLinksControllerTest do
       response =
         conn
         |> get(Helpers.visited_links_path(conn, :index), from: time_from)
+        |> validate_resp_schema(schema, "LinksResponse")
         |> json_response(200)
 
       assert response == right_response
@@ -170,6 +177,7 @@ defmodule TrackerWeb.VisitedLinksControllerTest do
       response =
         conn
         |> get(Helpers.visited_links_path(conn, :index), from: Integer.to_string(time_from))
+        |> validate_resp_schema(schema, "LinksResponse")
         |> json_response(200)
 
       assert response == right_response
